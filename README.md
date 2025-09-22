@@ -9,23 +9,23 @@ Make sure all tools are installed and available in your PATH.
 
 ## Quick Start
 
-1. Synthesize your Verilog design and convert to CNF:
+1. Synthesize the Verilog design into AIG:
 
    ```
-   yosys -s synth_to_cnf.ys
+   yosys -s synth2aig.ys
    ```
 
-2. Run the SAT solver with proof logging enabled:
+2. Convert AIG to CNF with mapping and query
    ```
-   cadical design.cnf --proof=proof.drat
-   ```
-
-3. Extract the UNSAT core from the proof:
-   ```
-   drat-trim design.cnf proof.drat -c core.cnf
+   python aig2cnf.py top.aig d=1 f=0 g=1
    ```
 
-4. Map the core clauses back to Verilog signals:
+3. Run the SAT solver on the CNF with a generated DRAT proof for UNSAT case:
    ```
-   python map_core_to_signals.py core.cnf mapping.json
+   cadical problem.cnf proof.drat
+   ```
+
+4. Extract UNSAT core
+   ```
+   drat-trim problem.cnf proof.drat -c core.cnf
    ```

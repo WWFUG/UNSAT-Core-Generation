@@ -1,0 +1,5 @@
+read_verilog top.v
+hierarchy -auto-top -top top
+proc; opt; flatten; opt_clean
+aigmap
+write_aiger -ascii -symbols top.aig
